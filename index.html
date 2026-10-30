@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101713">
+<title>RUSO FX — Market Desk</title>
+<style>
+:root {
+  --site-primary:#153d2b;
+  --site-secondary:#d6f36a;
+  --site-background:#101713;
+  --site-on-primary:#f5fff8;
+  --site-on-secondary:#172111;
+  --site-on-background:#edf4ee;
+  --site-font-body:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --site-font-heading:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --site-heading-scale:1;
+  --site-spacing-scale:1;
+  --site-radius-scale:1;
+  --site-decoration-opacity:1;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--site-background);color:var(--site-on-background);font-family:var(--site-font-body)}
+#app{min-height:100vh;background:var(--site-background);color:var(--site-on-background);border-radius:0}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,44px);border-bottom:1px solid #29362d;background:#131d17;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:.12em}
+.logo{width:36px;height:36px;border-radius:11px;background:var(--site-secondary);color:#142018;display:grid;place-items:center;font-weight:1000}
+.brand small{display:block;font-size:9px;letter-spacing:.2em;color:#9cae9f;margin-top:2px}
+.live{font-size:11px;color:#d6f36a;border:1px solid #42543a;padding:7px 10px;border-radius:30px}
+main{max-width:1180px;margin:auto;padding:28px clamp(14px,3vw,34px) 70px}
+.eyebrow{color:#b7d45e;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+h1{font-size:clamp(30px,5vw,54px);line-height:1.02;letter-spacing:-.055em;margin:10px 0 12px;font-family:var(--site-font-heading)}
+.sub{color:#a9b7ac;max-width:650px;line-height:1.6;font-size:14px}
+.notice{margin:20px 0;padding:12px 14px;border:1px solid #65552e;background:#292517;color:#e9dba9;border-radius:12px;font-size:12px;line-height:1.5}
+.grid{display:grid;grid-template-columns:1.45fr 1fr;gap:16px;margin-top:20px}
+.panel{background:#17221b;border:1px solid #2a3a2e;border-radius:18px;padding:18px}
+.panel h2{font-size:15px;margin:0 0 14px;letter-spacing:-.02em}
+.market-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pair{font-size:12px;color:#a9b7ac}
+.price{font-size:31px;font-weight:850;letter-spacing:-.04em;margin:10px 0 3px}
+.up{color:#a8dc78}.down{color:#ff8b7d}
+.chart{height:130px;width:100%;margin:8px 0 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:#111a14;border-radius:10px;padding:10px}
+.stat span{display:block;color:#93a398;font-size:10px;margin-bottom:5px}
+.stat b{font-size:13px}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.tab,button{border:1px solid #3a4b3d;background:#1b2a20;color:#e8f1e9;border-radius:9px;padding:8px 11px;font:inherit;font-size:11px;cursor:pointer}
+.tab.active,button.primary{background:var(--site-secondary);color:#172111;border-color:var(--site-secondary);font-weight:800}
+.signal{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-top:1px solid #2a392e}
+.signal:first-of-type{border-top:0}
+.signal strong{display:block;font-size:13px}
+.signal small{color:#9bad9f;font-size:10px;display:block;margin-top:4px}
+.pill{font-size:10px;font-weight:900;padding:6px 8px;border-radius:7px;background:#233d2c;color:#a8dc78}
+.pill.sell{background:#402722;color:#ff9b8e}
+.news-list{display:grid;gap:0}
+.news{padding:13px 0;border-top:1px solid #2a392e}
+.news:first-child{border-top:0}
+.news .tag{font-size:9px;color:#b7d45e;letter-spacing:.14em;font-weight:900}
+.news h3{font-size:13px;line-height:1.4;margin:5px 0}
+.news p{font-size:11px;color:#9eafa2;line-height:1.5;margin:0}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.calendar-row{display:flex;justify-content:space-between;padding:11px 0;border-top:1px solid #2a392e;font-size:12px;gap:12px}
+.calendar-row small{display:block;color:#94a598;margin-top:4px}
+.impact{color:#f2d17d;font-size:10px}
+.watch-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #2a392e;font-size:12px}
+.watch-row small{display:block;color:#94a598;margin-top:4px}
+footer{margin-top:26px;text-align:center;color:#748579;font-size:10px;line-height:1.6}
+@media(min-width:1000px){.grid{grid-template-columns:1.35fr 1fr}.bottom-grid{grid-template-columns:1.15fr .85fr}main{padding-top:38px}.panel{padding:22px}.chart{height:155px}}
+@media(max-width:760px){.grid,.bottom-grid{grid-template-columns:1fr}.topbar{padding:14px}.panel{padding:15px}main{padding-top:23px}.price{font-size:28px}.chart{height:110px}}
+</style>
+</head>
+<body>
+<div id="app">
+<header class="topbar">
+  <div class="brand"><div class="logo">R</div><div>RUSO FX<small>MARKET DESK</small></div></div>
+  <div style="display:flex;align-items:center;gap:10px"><span class="live">● DESKTOP + MOBILE</span><span class="live">FREE PREVIEW</span></div>
+</header>
+<main>
+  <div class="eyebrow">Your market, one screen</div>
+  <h1>Trade with a<br><span style="color:#d6f36a">clearer view.</span></h1>
+  <p class="sub">Your forex and gold market desk. Check market ideas, follow key headlines and keep an eye on the economic calendar from your phone or computer.</p>
+  <div class="notice"><b>Preview mode:</b> Prices, headlines and trade ideas below are illustrative demo content, not live market data or financial advice. Connect reliable data sources before publishing this as a live service.</div>
+  <div class="grid">
+    <section class="panel">
+      <div class="market-head"><div><div class="eyebrow">Market overview</div><h2 style="margin:6px 0 0">EUR / USD</h2></div><span class="pair">Forex · Major</span></div>
+      <div class="price">1.08426 <span class="up" style="font-size:13px">+0.24%</span></div>
+      <div class="pair">Illustrative price · not a live quote</div>
+      <svg class="chart" viewBox="0 0 600 150" preserveAspectRatio="none" aria-label="Illustrative EUR USD chart">
+        <defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#b7e76b" stop-opacity=".25"/><stop offset="1" stop-color="#b7e76b" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0 112 C35 98 45 115 75 91 S120 105 150 78 S195 88 220 69 S260 85 290 58 S330 70 360 49 S400 65 430 41 S470 58 500 31 S550 48 600 18 L600 150 L0 150Z" fill="url(#fill)"/>
+        <path d="M0 112 C35 98 45 115 75 91 S120 105 150 78 S195 88 220 69 S260 85 290 58 S330 70 360 49 S400 65 430 41 S470 58 500 31 S550 48 600 18" fill="none" stroke="#c4ed78" stroke-width="3" stroke-linecap="round"/>
+        <path d="M0 130H600M0 85H600M0 40H600" stroke="#344538" stroke-dasharray="4 7"/>
+      </svg>
+      <div class="stats">
+        <div class="stat"><span>DAY HIGH</span><b>1.08710</b></div>
+        <div class="stat"><span>DAY LOW</span><b>1.08040</b></div>
+        <div class="stat"><span>BIAS</span><b class="up">Bullish</b></div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="market-head"><h2>Trade ideas</h2><span class="eyebrow">RUSO FX</span></div>
+      <div class="tabs" id="signalTabs"><button class="tab active" data-filter="all">All</button><button class="tab" data-filter="buy">BUY</button><button class="tab" data-filter="sell">SELL</button></div>
+      <div id="signals">
+        <div class="signal" data-side="buy"><div><strong>EUR/USD · BUY</strong><small>Watch for bullish confirmation</small></div><span class="pill">BUY IDEA</span></div>
+        <div class="signal" data-side="sell"><div><strong>GBP/JPY · SELL</strong><small>Example resistance rejection setup</small></div><span class="pill sell">SELL IDEA</span></div>
+        <div class="signal" data-side="buy"><div><strong>USD/JPY · BUY</strong><small>Example trend continuation setup</small></div><span class="pill">BUY IDEA</span></div>
+        <div class="signal" data-side="sell"><div><strong>XAU/USD · SELL</strong><small>Example gold resistance setup</small></div><span class="pill sell">SELL IDEA</span></div>
+        <div class="signal" data-side="buy"><div><strong>XAU/USD · BUY</strong><small>Example gold breakout watch</small></div><span class="pill">BUY IDEA</span></div>
+      </div>
+      <p style="font-size:10px;color:#8fa092;line-height:1.5;margin:12px 0 0">These are sample layouts only. No entry, stop-loss or take-profit is being recommended.</p>
+    </section>
+  </div>
+  <div class="bottom-grid">
+    <section class="panel">
+      <div class="market-head"><h2>Market headlines</h2><span class="eyebrow">NEWS</span></div>
+      <div class="news-list">
+        <article class="news"><div class="tag">CENTRAL BANKS · DEMO</div><h3>Traders watch central-bank comments for clues on the rate outlook</h3><p>Example headline card. Add a licensed news feed to show current reporting and source links.</p></article>
+        <article class="news"><div class="tag">FX MARKETS · DEMO</div><h3>Dollar pairs remain sensitive to incoming inflation data</h3><p>Example market summary for the website preview, not a current news report.</p></article>
+        <article class="news"><div class="tag">GOLD · DEMO</div><h3>Gold traders monitor yields and risk sentiment</h3><p>Example market note. A live feed is needed for current reporting.</p></article>
+        <article class="news"><div class="tag">FOREX · DEMO</div><h3>EUR/USD traders track policy expectations on both sides of the Atlantic</h3><p>Illustrative forex coverage for the RUSO FX dashboard.</p></article>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="market-head"><h2>Economic calendar</h2><span class="eyebrow">UP NEXT</span></div>
+      <div class="calendar-row"><div><b>US CPI</b><small>Inflation · USD</small></div><span class="impact">HIGH IMPACT</span></div>
+      <div class="calendar-row"><div><b>FOMC rate decision</b><small>Central bank · USD</small></div><span class="impact">HIGH IMPACT</span></div>
+      <div class="calendar-row"><div><b>Eurozone GDP</b><small>Growth · EUR</small></div><span class="impact">MEDIUM</span></div>
+      <p style="font-size:10px;color:#8fa092;line-height:1.5">Demo events only. A real calendar must display verified event times in your local timezone.</p>
+    </section>
+  </div>
+  <section class="panel" style="margin-top:16px">
+    <div class="market-head"><h2>Watchlist</h2><span class="eyebrow">SAMPLE PAIRS</span></div>
+    <div class="watch-row"><div><b>EUR/USD</b><small>Euro / US Dollar</small></div><b>1.08426</b><span class="up">+0.24%</span></div>
+    <div class="watch-row"><div><b>GBP/USD</b><small>British Pound / US Dollar</small></div><b>1.27180</b><span class="down">−0.12%</span></div>
+    <div class="watch-row"><div><b>USD/JPY</b><small>US Dollar / Japanese Yen</small></div><b>149.620</b><span class="up">+0.31%</span></div>
+    <div class="watch-row"><div><b>XAU/USD</b><small>Gold / US Dollar</small></div><b>2,745.20</b><span class="up">+0.18%</span></div>
+    <div class="watch-row"><div><b>US Dollar Index</b><small>DXY · Dollar basket</small></div><b>104.20</b><span class="down">−0.08%</span></div>
+  </section>
+  <footer>RUSO FX · Independent market education concept<br>Designed for phone and desktop · Demo content only · Trading involves risk · Verify prices and manage risk.</footer>
+</main>
+</div>
+<script>
+// Signal filters work locally without an account or paid service.
+document.querySelectorAll("#signalTabs button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll("#signalTabs button").forEach(b=>b.classList.remove("active"));
+    button.classList.add("active");
+    const filter=button.dataset.filter;
+    document.querySelectorAll("#signals .signal").forEach(item=>{
+      item.style.display=(filter==="all"||item.dataset.side===filter)?"flex":"none";
+    });
+  });
+});
+</script>
+</body>
+</html>
